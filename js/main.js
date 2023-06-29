@@ -1,45 +1,64 @@
-(function () {
-    let gameMatrix = [];
+let snakePieces = [
+    [9, 16],
+    [9, 17],
+    [9, 18],
+];
 
-    const PIXEL = true;
-    const EMPTY_SPACE = false;
+let food = [9, 9];
 
-    function initialize() {
-        for (let y = 0; y < 20; y++) {
-            gameMatrix[y] = [];
+let gameStarted = false;
 
-            for (let x = 0; x < 20; x++) {
-                gameMatrix[y] = [];
+let keypressFlag = false;
 
-                gameMatrix[y][x] = EMPTY_SPACE;
-            }
+function moveSnake(key) {
+    for (let piece in snakePieces) {
+        if (key === 'KeyW' && (snakePieces[piece][1] > 0)) {
+            snakePieces[piece][1] -= 1;
         }
     }
 
-    function drawPixel(x, y) {
-        gameMatrix[y][x] = PIXEL;
+    keypressFlag = false;
+}
+
+function handleKey(event) {
+    console.log(gameStarted, keypressFlag);
+
+    if (gameStarted === false || (keypressFlag === true)) {
+        return;
     }
 
-    function render() {
-        let table = document.querySelector('#gameField');
+    // might as well add support for arrows, but not now
 
-        let rows = table.querySelectorAll('tr');
+    if (['KeyW', 'KeyS', 'KeyA', 'KeyD'].indexOf(event.code) !== -1) {
+        keypressFlag = true;
 
-        for (let [rowId, row] of rows.entries()) {
-            let columns = row.querySelectorAll('td');
-
-            for (let [columnId, column] of columns.entries()) {
-                if (gameMatrix[rowId][columnId] === PIXEL) {
-                    column.querySelector('input').checked = true;
-                }
-            }
-        }
+        moveSnake(event.code);
     }
+}
 
-    initialize();
+function initializeSnake() {
+    for (let piece of snakePieces) {
+        addPixel(piece[0], piece[1])
+    }
+}
 
-    // render pixel at x=0,y=1
-    // drawPixel(0, 1);
+function initializeFood() {
+    addPixel(food[0], food[1])
+}
+
+function mainLoop() {
+    gameStarted = true;
+
+    cleanMatrix();
+
+    initializeSnake();
+    initializeFood();
 
     render();
-})();
+}
+
+document.addEventListener('keydown', handleKey);
+
+setInterval(function () {
+    mainLoop()
+}, 33);
