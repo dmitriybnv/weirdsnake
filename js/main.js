@@ -2,11 +2,16 @@ const DIRECTION_UP = 'up';
 const DIRECTION_DOWN = 'down';
 const DIRECTION_LEFT = 'left';
 const DIRECTION_RIGHT = 'right';
+
 const MOVE_DELAY = 200;
 
 let mainInterval;
+
 let gameActiveFlag;
 let keypressFlag;
+let newPieceFlag;
+let pauseFlag;
+
 let movingDirection;
 let lastAutoMoveTimestamp;
 let snake;
@@ -19,6 +24,8 @@ function resetGame() {
 
     gameActiveFlag = false;
     keypressFlag = false;
+    newPieceFlag = false;
+    pauseFlag = false;
 
     movingDirection = DIRECTION_UP;
 
@@ -47,14 +54,10 @@ function gameOver() {
     startGame();
 }
 
-function grow() {
-
-}
-
 function generateFoodCoords() {
     // min is one, no need to be next to border
-    let randomX = randomInteger(1, FIELD_WIDTH - 1);
-    let randomY = randomInteger(1, FIELD_HEIGHT - 1);
+    let randomX = randomInteger(1, FIELD_WIDTH - 2);
+    let randomY = randomInteger(1, FIELD_HEIGHT - 2);
 
     // check if pixel occupied by snake
     for (let piece of snake) {
@@ -66,8 +69,16 @@ function generateFoodCoords() {
     return [randomX, randomY];
 }
 
+function grow() {
+    snake.push(snake.at(-1));
+
+    newPieceFlag = true;
+}
+
 function eat() {
     food = generateFoodCoords();
+
+    grow();
 }
 
 function moveSnake(direction, automaticFlag) {
@@ -148,6 +159,12 @@ function moveSnake(direction, automaticFlag) {
     }
 
     for (let piece = 1; piece < snake.length; piece++) {
+        if (piece === snake.length - 1 && (newPieceFlag === true)) {
+            newPieceFlag = false;
+
+            break;
+        }
+
         let nextPreviousX = snake[piece][0];
         let nextPreviousY = snake[piece][1];
 
