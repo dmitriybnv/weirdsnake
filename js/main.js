@@ -1,34 +1,50 @@
-let mainInterval = null;
-
-let gameActive = false;
-
-let snake = [
-    [9, 16],
-    [9, 17],
-    [9, 18],
-];
-
-let food = [9, 9];
-
 const DIRECTION_UP = 'up';
 const DIRECTION_DOWN = 'down';
 const DIRECTION_LEFT = 'left';
 const DIRECTION_RIGHT = 'right';
+const MOVE_DELAY = 200;
 
-let movingDirection = DIRECTION_UP;
+let mainInterval;
+let gameActiveFlag;
+let keypressFlag;
+let movingDirection;
+let lastAutoMoveTimestamp;
+let snake;
+let food;
 
-let keypressFlag = false;
+let firstTimeFlag = true;
 
-const MOVE_DELAY = 550;
+function resetGame() {
+    mainInterval = null;
 
-let lastAutoMoveTimestamp = new Date().getTime() + MOVE_DELAY;
+    gameActiveFlag = false;
+    keypressFlag = false;
+
+    movingDirection = DIRECTION_UP;
+
+    lastAutoMoveTimestamp = new Date().getTime() + MOVE_DELAY;
+
+    snake = [
+        [9, 16],
+        [9, 17],
+        [9, 18],
+    ];
+
+    food = [9, 9];
+}
+
+function updateTimestamp() {
+    lastAutoMoveTimestamp = new Date().getTime() + MOVE_DELAY;
+}
+
+function pauseGame() {
+    alert('paused');
+
+    updateTimestamp();
+}
 
 function gameOver() {
-    gameActive = false;
-
-    clearInterval(mainInterval)
-
-    alert('game over');
+    startGame();
 }
 
 function grow() {
@@ -141,13 +157,19 @@ function moveSnake(direction, automaticFlag) {
         previousY = nextPreviousY;
     }
 
-    lastAutoMoveTimestamp = new Date().getTime();
+    updateTimestamp();
 
     keypressFlag = false;
 }
 
 function handleKey(event) {
-    if (gameActive === false || (keypressFlag === true)) {
+    if (gameActiveFlag === false || (keypressFlag === true)) {
+        return;
+    }
+
+    if (event.code === 'Escape') {
+        pauseGame();
+
         return;
     }
 
@@ -203,9 +225,17 @@ function mainLoop() {
 }
 
 function startGame() {
-    alert('press OK to start');
+    resetGame();
 
-    gameActive = true;
+    if (firstTimeFlag === true) {
+        alert('press OK to start');
+
+        updateTimestamp();
+
+        firstTimeFlag = false;
+    }
+    
+    gameActiveFlag = true;
 
     mainInterval = setInterval(mainLoop, 16);
 
