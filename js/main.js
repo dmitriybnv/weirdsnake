@@ -21,16 +21,37 @@ let keypressFlag = false;
 
 const MOVE_DELAY = 550;
 
-let lastAutoMoveTimestamp = new Date().getTime();
+let lastAutoMoveTimestamp = new Date().getTime() + MOVE_DELAY;
 
 function gameOver() {
     gameActive = false;
 
     clearInterval(mainInterval)
 
-    console.log('game over ' + JSON.stringify(snake));
+    alert('game over');
+}
 
-    alert('GAME OVER');
+function grow() {
+
+}
+
+function generateFoodCoords() {
+    // min is one, no need to be next to border
+    let randomX = randomInteger(1, FIELD_WIDTH - 1);
+    let randomY = randomInteger(1, FIELD_HEIGHT - 1);
+
+    // check if pixel occupied by snake
+    for (let piece of snake) {
+        if (piece[0] === randomX && (piece[1] === randomY)) {
+            return generateFoodCoords();
+        }
+    }
+
+    return [randomX, randomY];
+}
+
+function eat() {
+    food = generateFoodCoords();
 }
 
 function moveSnake(direction, automaticFlag) {
@@ -100,6 +121,10 @@ function moveSnake(direction, automaticFlag) {
         }
 
         snake[0][0] += 1;
+    }
+
+    if (snake[0][0] === food[0] && (snake[0][1] === food[1])) {
+        eat();
     }
 
     if (automaticFlag === false) {
@@ -177,8 +202,14 @@ function mainLoop() {
     render();
 }
 
-document.addEventListener('keyup', handleKey);
+function startGame() {
+    alert('press OK to start');
 
-gameActive = true;
+    gameActive = true;
 
-mainInterval = setInterval(mainLoop, 16);
+    mainInterval = setInterval(mainLoop, 16);
+
+    document.addEventListener('keyup', handleKey);
+}
+
+startGame();
