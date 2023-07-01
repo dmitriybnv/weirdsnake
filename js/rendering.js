@@ -1,3 +1,5 @@
+'use strict';
+
 let pixels = [];
 
 const FIELD_WIDTH = 19;

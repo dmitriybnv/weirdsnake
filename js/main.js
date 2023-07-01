@@ -1,3 +1,5 @@
+'use strict';
+
 const DIRECTION_UP = 'up';
 const DIRECTION_DOWN = 'down';
 const DIRECTION_LEFT = 'left';
@@ -21,6 +23,20 @@ let food;
 
 let firstTimeFlag = true;
 
+class SnakePiece {
+    constructor(x = 0, y = 0) {
+        this.x = x;
+        this.y = y;
+    }
+}
+
+class Food {
+    constructor(x = 0, y = 0) {
+        this.x = x;
+        this.y = y;
+    }
+}
+
 function resetGame() {
     mainInterval = null;
 
@@ -34,12 +50,12 @@ function resetGame() {
     lastAutoMoveTimestamp = new Date().getTime() + MOVE_DELAY;
 
     snake = [
-        [9, 16],
-        [9, 17],
-        [9, 18],
+        new SnakePiece(9, 16),
+        new SnakePiece(9, 17),
+        new SnakePiece(9, 18),
     ];
 
-    food = [9, 9];
+    food = new Food(9, 9);
 }
 
 function updateTimestamp() {
@@ -47,9 +63,13 @@ function updateTimestamp() {
 }
 
 function pauseGame() {
-    alert('paused');
+    if (pauseFlag === false) {
+        pauseFlag = true;
+    } else {
+        updateTimestamp();
 
-    updateTimestamp();
+        pauseFlag = false;
+    }
 }
 
 function gameOver() {
@@ -57,18 +77,18 @@ function gameOver() {
 }
 
 function generateFoodCoords() {
-    // min is one, no need to be next to border
+    // prevent food from spawning at border
     let randomX = randomInteger(1, FIELD_WIDTH - 2);
     let randomY = randomInteger(1, FIELD_HEIGHT - 2);
 
     // check if pixel occupied by snake
     for (let piece of snake) {
-        if (piece[0] === randomX && (piece[1] === randomY)) {
+        if (piece.x === randomX && (piece.y === randomY)) {
             return generateFoodCoords();
         }
     }
 
-    return [randomX, randomY];
+    return new Food(randomX, randomY);
 }
 
 function grow() {
@@ -109,50 +129,50 @@ function moveSnake(direction, automaticFlag) {
         }
     }
 
-    let previousX = snake[0][0];
-    let previousY = snake[0][1];
+    let previousX = snake[0].x;
+    let previousY = snake[0].y;
 
     if (direction === DIRECTION_UP) {
-        if (snake[0][1] === 0) {
+        if (snake[0].y === 0) {
             gameOver();
 
             return;
         }
 
-        snake[0][1] -= 1;
+        snake[0].y -= 1;
     }
 
     if (direction === DIRECTION_DOWN) {
-        if (snake[0][1] === FIELD_HEIGHT - 1) {
+        if (snake[0].y === FIELD_HEIGHT - 1) {
             gameOver();
 
             return;
         }
 
-        snake[0][1] += 1;
+        snake[0].y += 1;
     }
 
     if (direction === DIRECTION_LEFT) {
-        if (snake[0][0] === 0) {
+        if (snake[0].x === 0) {
             gameOver();
 
             return;
         }
 
-        snake[0][0] -= 1;
+        snake[0].x -= 1;
     }
 
     if (direction === DIRECTION_RIGHT) {
-        if (snake[0][0] === FIELD_WIDTH - 1) {
+        if (snake[0].x === FIELD_WIDTH - 1) {
             gameOver();
 
             return;
         }
 
-        snake[0][0] += 1;
+        snake[0].x += 1;
     }
 
-    if (snake[0][0] === food[0] && (snake[0][1] === food[1])) {
+    if (snake[0].x === food.x && (snake[0].y === food.y)) {
         eat();
     }
 
@@ -167,10 +187,10 @@ function moveSnake(direction, automaticFlag) {
             break;
         }
 
-        let nextPreviousX = snake[piece][0];
-        let nextPreviousY = snake[piece][1];
+        let nextPreviousX = snake[piece].x;
+        let nextPreviousY = snake[piece].y;
 
-        snake[piece] = [previousX, previousY];
+        snake[piece] = new SnakePiece(previousX, previousY);
 
         previousX = nextPreviousX;
         previousY = nextPreviousY;
@@ -224,15 +244,19 @@ function handleKey(event) {
 
 function drawSnake() {
     for (let piece of snake) {
-        addPixel(piece[0], piece[1])
+        addPixel(piece.x, piece.y);
     }
 }
 
 function drawFood() {
-    addPixel(food[0], food[1], FOOD_COLOR);
+    addPixel(food.x, food.y, FOOD_COLOR);
 }
 
 function mainLoop() {
+    if (pauseFlag === true) {
+        return;
+    }
+
     cleanPixels();
 
     drawSnake();
