@@ -1,27 +1,24 @@
-let gameMatrix = [];
-
-const PIXEL = true;
-const EMPTY_SPACE = false;
+let pixels = [];
 
 const FIELD_WIDTH = 19;
 const FIELD_HEIGHT = 19;
 
-// we could even go as far as creating HTML matrix
-// based on preferred width and height but it's too tedious
-function cleanMatrix() {
-    for (let y = 0; y < FIELD_HEIGHT; y++) {
-        gameMatrix[y] = [];
+const DEFAULT_COLOR = '';
 
-        for (let x = 0; x < FIELD_WIDTH; x++) {
-            gameMatrix[y] = [];
-
-            gameMatrix[y][x] = EMPTY_SPACE;
-        }
+class Pixel {
+    constructor(x = 0 , y = 0, color = DEFAULT_COLOR) {
+        this.x = x;
+        this.y = y;
+        this.color = color;
     }
 }
 
-function addPixel(x, y) {
-    gameMatrix[y][x] = PIXEL;
+function cleanPixels() {
+    pixels = [];
+}
+
+function addPixel(x, y, color = DEFAULT_COLOR) {
+    pixels.push(new Pixel(x, y, color));
 }
 
 function render() {
@@ -33,7 +30,21 @@ function render() {
         let columns = row.querySelectorAll('td');
 
         for (let [columnId, column] of columns.entries()) {
-            column.querySelector('input').checked = gameMatrix[rowId][columnId] === PIXEL;
+            let foundPixel = null;
+
+            for (let pixel of pixels) {
+                if (columnId === pixel.x && (rowId === pixel.y)) {
+                    foundPixel = pixel;
+
+                    break;
+                }
+            }
+
+            let input = column.querySelector('input');
+
+            input.checked = foundPixel !== null;
+
+            input.style['accent-color'] = foundPixel !== null ? foundPixel.color : DEFAULT_COLOR;
         }
     }
 }

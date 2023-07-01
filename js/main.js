@@ -5,6 +5,8 @@ const DIRECTION_RIGHT = 'right';
 
 const MOVE_DELAY = 200;
 
+const FOOD_COLOR = 'green';
+
 let mainInterval;
 
 let gameActiveFlag;
@@ -227,11 +229,11 @@ function drawSnake() {
 }
 
 function drawFood() {
-    addPixel(food[0], food[1])
+    addPixel(food[0], food[1], FOOD_COLOR);
 }
 
 function mainLoop() {
-    cleanMatrix();
+    cleanPixels();
 
     drawSnake();
     drawFood();
