@@ -294,4 +294,6 @@ function startGame() {
     document.addEventListener('keyup', handleKey);
 }
 
+createDOM();
+
 startGame();

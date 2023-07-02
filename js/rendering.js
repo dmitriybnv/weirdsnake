@@ -15,6 +15,28 @@ class Pixel {
     }
 }
 
+function createDOM() {
+    let table = document.querySelector('#gameField');
+
+    for (let y = 0; y < FIELD_HEIGHT; y++) {
+        let tr = document.createElement('tr');
+
+        table.appendChild(tr);
+
+        for (let x = 0; x < FIELD_WIDTH; x++) {
+            let td = document.createElement('td');
+            let label = document.createElement('label');
+            let input = document.createElement('input');
+
+            input.type = 'checkbox';
+
+            tr.appendChild(td);
+            td.appendChild(label);
+            label.appendChild(input);
+        }
+    }
+}
+
 function cleanPixels() {
     pixels = [];
 }
