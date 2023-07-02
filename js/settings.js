@@ -3,6 +3,9 @@
 const FIELD_WIDTH = 19;
 const FIELD_HEIGHT = 19;
 
+const INPUT_TYPE = 'checkbox';
+// const INPUT_TYPE = 'radio';
+
 // should override default browser setting
 const DEFAULT_COLOR = 'rgb(0, 96, 223)';
 
