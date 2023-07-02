@@ -2,11 +2,6 @@
 
 let pixels = [];
 
-const FIELD_WIDTH = 19;
-const FIELD_HEIGHT = 19;
-
-const DEFAULT_COLOR = '';
-
 class Pixel {
     constructor(x = 0, y = 0, color = DEFAULT_COLOR) {
         this.x = x;

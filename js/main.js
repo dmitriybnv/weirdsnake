@@ -1,14 +1,5 @@
 'use strict';
 
-const DIRECTION_UP = 'up';
-const DIRECTION_DOWN = 'down';
-const DIRECTION_LEFT = 'left';
-const DIRECTION_RIGHT = 'right';
-
-const MOVE_DELAY = 200;
-
-const FOOD_COLOR = 'green';
-
 let mainInterval;
 
 let gameActiveFlag;
