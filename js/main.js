@@ -286,7 +286,7 @@ function startGame() {
 
         firstTimeFlag = false;
     }
-    
+
     gameActiveFlag = true;
 
     mainInterval = setInterval(mainLoop, 16);
