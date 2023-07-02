@@ -172,6 +172,15 @@ function moveSnake(direction, automaticFlag) {
         snake[0].x += 1;
     }
 
+    // except for the first piece
+    for (let piece of snake.slice(1)) {
+        if (piece.x === snake[0].x && (piece.y === snake[0].y)) {
+            gameOver();
+
+            return;
+        }
+    }
+
     if (snake[0].x === food.x && (snake[0].y === food.y)) {
         eat();
     }
