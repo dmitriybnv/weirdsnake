@@ -69,17 +69,19 @@ function gameOver() {
 
 function generateFoodCoords() {
     // prevent food from spawning at border
-    let randomX = randomInteger(1, FIELD_WIDTH - 2);
-    let randomY = randomInteger(1, FIELD_HEIGHT - 2);
+    let food = new Food(
+        randomInteger(1, FIELD_WIDTH - 2),
+        randomInteger(1, FIELD_HEIGHT - 2)
+    );
 
     // check if pixel occupied by snake
     for (let piece of snake) {
-        if (piece.x === randomX && (piece.y === randomY)) {
+        if (piece.x === food.x && (piece.y === food.y)) {
             return generateFoodCoords();
         }
     }
 
-    return new Food(randomX, randomY);
+    return food;
 }
 
 function grow() {

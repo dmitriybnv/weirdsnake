@@ -23,7 +23,7 @@ function createDOM() {
             let label = document.createElement('label');
             let input = document.createElement('input');
 
-            input.type =  INPUT_TYPE;
+            input.type = INPUT_TYPE;
 
             tr.appendChild(td);
             td.appendChild(label);
