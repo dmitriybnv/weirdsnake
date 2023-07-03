@@ -14,6 +14,8 @@ let food;
 
 let firstTimeFlag = true;
 
+let timestamp = new Date().getTime();
+
 class SnakePiece {
     constructor(x = 0, y = 0) {
         this.x = x;
@@ -118,6 +120,14 @@ function moveSnake(direction, automaticFlag) {
         if (new Date().getTime() - lastAutoMoveTimestamp < MOVE_DELAY) {
             return;
         }
+
+        console.log('automatic movement', new Date().getTime(), direction, new Date().getTime() - timestamp + ' ms');
+
+        timestamp = new Date().getTime();
+    } else {
+        console.log('manual movement', new Date().getTime(), direction,  new Date().getTime() - timestamp + ' ms');
+
+        timestamp = new Date().getTime();
     }
 
     let previousX = snake[0].x;
@@ -212,6 +222,10 @@ function handleKey(event) {
         return;
     }
 
+    console.log('keystroke', new Date().getTime(), new Date().getTime() - timestamp + ' ms');
+
+    timestamp = new Date().getTime();
+
     let direction = '';
 
     // WASD and arrows used to control snake
@@ -282,7 +296,7 @@ function startGame() {
 
     mainInterval = setInterval(mainLoop, 16);
 
-    document.addEventListener('keyup', handleKey);
+    document.addEventListener('keydown', handleKey);
 }
 
 createDOM();
