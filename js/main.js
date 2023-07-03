@@ -282,7 +282,7 @@ function startGame() {
 
     mainInterval = setInterval(mainLoop, 16);
 
-    document.addEventListener('keyup', handleKey);
+    document.addEventListener('keydown', handleKey);
 }
 
 createDOM();

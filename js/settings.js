@@ -11,7 +11,7 @@ const DEFAULT_COLOR = 'rgb(0, 96, 223)';
 
 const FOOD_COLOR = 'green';
 
-const MOVE_DELAY = 200;
+const MOVE_DELAY = 100;
 
 const DIRECTION_UP = 'up';
 const DIRECTION_DOWN = 'down';
